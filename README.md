@@ -1,3 +1,9 @@
+# GESTFLY
+
+## About
+
+Beausys is a SaaS platform designed to facilitate service scheduling and sales management. Users can register, create a company, and manage products and services. Their customers can then schedule appointments for services.
+
 ## Design System: Atomic Design
 
 ```
