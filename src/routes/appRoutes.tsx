@@ -8,12 +8,10 @@ import { createBrowserRouter } from "react-router";
 export const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "*", element: <NotFoundPage /> },
+  { path: "/user", element: <User /> },
 
   {
     Component: BasePage,
-    children: [
-      { path: "/home", element: <Home /> },
-      { path: "/user", element: <User /> },
-    ],
+    children: [{ path: "/home", element: <Home /> }],
   },
 ]);
