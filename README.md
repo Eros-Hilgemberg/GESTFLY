@@ -22,4 +22,4 @@
 └── index.tsx               # React entry point
 ```
 
-More infos about Atomic Design: https://atomicdesign.bradfrost.com/chapter-2/
+More information about Atomic Design: https://atomicdesign.bradfrost.com/chapter-2/
