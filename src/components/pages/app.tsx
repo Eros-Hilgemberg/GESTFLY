@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 function App() {
   return (
     <div className="h-screen w-screen relative bg-white">
-      <NavBar isLogged />
+      <NavBar />
       <div className="flex flex-col gap-5 items-center justify-center flex-1 h-full">
         <h1 className="text-2xl md:text-4xl ">
           Seja bem vindo ao <span className="font-bold">GESTFLY</span>
@@ -15,7 +15,7 @@ function App() {
           gerenciamento de vendas.
         </h2>
         <div className="flex gap-5 justify-between">
-          <Link to="/">
+          <Link to="/register">
             <Button variant={"default"}>Cadastre-se</Button>
           </Link>
           <Link to="/user">

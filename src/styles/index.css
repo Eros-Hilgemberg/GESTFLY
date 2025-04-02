@@ -22,7 +22,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --atention: oklch(0.72 0.1871 45.73);
   --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
+  --input: oklch(0.72 0.006 264.531);
   --ring: oklch(0.707 0.022 261.325);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -119,5 +119,8 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  input[type="password"]::-ms-reveal {
+    display: none;
   }
 }

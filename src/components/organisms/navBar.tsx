@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 interface navbarProps {
   type?: string;
-  isLogged?: boolean;
+  isLogged?: string;
 }
 function NavBar({ type, isLogged }: navbarProps) {
   switch (type) {
@@ -15,17 +15,17 @@ function NavBar({ type, isLogged }: navbarProps) {
               <h1 className="text-lg font-bold">GESTFLY</h1>
             </Link>
           </div>
-          {!isLogged ? (
+          {isLogged ? (
             <div className="flex">
               <Link to={"/"}>
-                <Button variant={"secondary"} className="text-destructive w-30">
-                  Sair
+                <Button variant={"secondary"} className="w-30">
+                  {isLogged}
                 </Button>
               </Link>
             </div>
           ) : (
             <div className="flex justify-between gap-3">
-              <Link to={"/"}>
+              <Link to={"/register"}>
                 <Button variant={"secondary"}>Cadastre-se</Button>
               </Link>
               <Link to="/user">

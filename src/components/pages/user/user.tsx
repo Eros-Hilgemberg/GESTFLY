@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 function User() {
   return (
     <div className="h-screen w-screen relative">
-      <NavBar />
+      <NavBar isLogged="Sair" />
       <div className="flex flex-col items-center justify-center flex-1  h-full">
         <Card className="flex size-4/5 md:size-4/5 lg:size-4/5">
           <CardHeader>
