@@ -18,7 +18,7 @@ function App() {
           <Link to="/register">
             <Button variant={"default"}>Cadastre-se</Button>
           </Link>
-          <Link to="/user">
+          <Link to="/login">
             <Button variant={"outline"}>Realize seu login</Button>
           </Link>
         </div>

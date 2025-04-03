@@ -21,14 +21,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { z } from "zod";
 
 const userSchema = z.object({
-  name: z
-    .string({
-      required_error: "Preencha o campo nome!",
-    })
-    .min(5, "Mínimo 5 caracteres!"),
   email: z
     .string({
       required_error: "Preencha o campo email!",
@@ -42,11 +38,11 @@ const userSchema = z.object({
     .min(5, "Mínimo 6 caracteres!"),
 });
 
-function UserRegister() {
+function UserLogin() {
+  let navigate = useNavigate();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -54,6 +50,7 @@ function UserRegister() {
 
   function onSubmit(data: z.infer<typeof userSchema>) {
     console.log(JSON.stringify(data));
+    navigate("/user");
   }
   return (
     <div className="h-screen w-screen">
@@ -65,8 +62,10 @@ function UserRegister() {
       >
         <Card className="flex  w-5/6 h-auto lg:w-1/3">
           <CardHeader>
-            <CardTitle>Registro de Usuário</CardTitle>
-            <CardDescription>Realize seu registro</CardDescription>
+            <CardTitle>Login de Usuário</CardTitle>
+            <CardDescription>
+              Informe os campos e realize o login
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -74,23 +73,6 @@ function UserRegister() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Digite seu nome"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -122,13 +104,21 @@ function UserRegister() {
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" type="submit">
-                  Salvar
-                </Button>
+                <div>
+                  <Button className="w-full" type="submit">
+                    Salvar
+                  </Button>
+                  <p className="p-1 text-sm text-center">
+                    Esqueceu sua senha?
+                    <a className="font-semibold text-blue-500" href="">
+                      Clique aqui!
+                    </a>
+                  </p>
+                </div>
               </form>
             </Form>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col">
             <Button className="w-full" variant={"outline"}>
               <GoogleLogo size={32} />
               Continuar com Google
@@ -140,4 +130,4 @@ function UserRegister() {
   );
 }
 
-export default UserRegister;
+export default UserLogin;

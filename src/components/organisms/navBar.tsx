@@ -28,7 +28,7 @@ function NavBar({ type, isLogged }: navbarProps) {
               <Link to={"/register"}>
                 <Button variant={"secondary"}>Cadastre-se</Button>
               </Link>
-              <Link to="/user">
+              <Link to="/login">
                 <Button variant={"outline"} className="bg-primary">
                   Login
                 </Button>
