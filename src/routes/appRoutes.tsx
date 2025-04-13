@@ -1,4 +1,5 @@
 import App from "@/components/pages/app";
+import CompanyCreate from "@/components/pages/company/companyCreate";
 import Home from "@/components/pages/home";
 import NotFoundPage from "@/components/pages/notFoundPage";
 import User from "@/components/pages/user/user";
@@ -13,6 +14,7 @@ export const router = createBrowserRouter([
   { path: "/user", element: <User /> },
   { path: "/register", element: <UserRegister /> },
   { path: "/login", element: <UserLogin /> },
+  { path: "/company/create", element: <CompanyCreate /> },
   {
     Component: BasePage,
     children: [{ path: "/home", element: <Home /> }],

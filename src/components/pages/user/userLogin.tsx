@@ -80,7 +80,11 @@ function UserLogin() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite um email" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="Digite um email"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
