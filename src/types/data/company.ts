@@ -31,12 +31,4 @@ export const company = [
     zipCode: "83510000",
     cellPhone: "42996665555",
   },
-  {
-    userId: "d1c8f5a4-a278-44cf-81e3-7b2614fbe1a8",
-    name: "Maria Santos",
-    address: "Rua das Flores",
-    address_number: 120,
-    zipCode: "84130000",
-    cellPhone: "42995554444",
-  },
 ];
