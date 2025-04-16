@@ -1,4 +1,3 @@
-import toogleSideBar from "@/hooks/toogleSideBar";
 import { List } from "@phosphor-icons/react";
 
 interface navbarProps {
@@ -9,10 +8,7 @@ function NavBarIsLogged({ type }: navbarProps) {
     default:
       return (
         <nav className="bg-primary text-white text-center gap-2 p-2 flex items-center w-full">
-          <button
-            onClick={() => toogleSideBar()}
-            className="hover:bg-primary rounded-sm"
-          >
+          <button className="hover:bg-primary rounded-sm">
             <List size={32} />
           </button>
           <div>
