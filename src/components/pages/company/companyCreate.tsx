@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -77,11 +78,12 @@ function CompanyCreate() {
         <CardTitle>Registro de Empresa</CardTitle>
         <CardDescription>Registre uma nova empresa</CardDescription>
       </CardHeader>
+      <Separator className="my-4" />
       <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 flex lg:gap-x-1 flex-wrap justify-between"
+            className="space-y-8 flex gap-x-1 flex-wrap justify-between"
           >
             <FormField
               control={form.control}
