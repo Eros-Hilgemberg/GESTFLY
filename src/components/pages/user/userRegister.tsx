@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { API } from "@/utils/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
@@ -52,8 +53,13 @@ function UserRegister() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof userSchema>) {
-    console.log(JSON.stringify(data));
+  async function onSubmit(data: z.infer<typeof userSchema>) {
+    try {
+      const response = await API.post("/auth/sign-up", data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Erro ao realizar login:", error);
+    }
   }
   return (
     <div className="h-screen w-screen">

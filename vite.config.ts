@@ -5,7 +5,16 @@ import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  server: { host: true },
+  server: {
+    host: true,
+    proxy: {
+      "/api": {
+        target: "https://beausys-backend-production.up.railway.app/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
