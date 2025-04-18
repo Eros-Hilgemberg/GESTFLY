@@ -77,7 +77,7 @@ const itemsFooter = [
   },
   {
     title: "Configurações",
-    url: "/configurations",
+    url: "/config",
     icon: Gear,
     subtitle: "Acesse as configurações",
   },

@@ -1,13 +1,12 @@
-import { motion } from "framer-motion";
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Separator } from "../ui/separator";
-
-function Home() {
+} from "@/components/ui/card";
+import { Separator } from "@radix-ui/react-separator";
+import { motion } from "framer-motion";
+function ConfigCompany() {
   return (
     <motion.div
       whileInView={{ opacity: [0.5, 1], scale: [0.8, 1] }}
@@ -15,8 +14,10 @@ function Home() {
       className="flex flex-col grow-1"
     >
       <CardHeader>
-        <CardTitle>Home</CardTitle>
-        <CardDescription>Tela inicial</CardDescription>
+        <CardTitle>Configurações da empresa</CardTitle>
+        <CardDescription>
+          Gerencie as configurações de sua empresa
+        </CardDescription>
       </CardHeader>
       <Separator className="my-4" />
       <CardContent></CardContent>
@@ -24,4 +25,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default ConfigCompany;
