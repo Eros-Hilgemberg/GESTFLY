@@ -18,8 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import { number, z } from "zod";
-
+import { z } from "zod";
 const companySchema = z.object({
   name: z
     .string({
@@ -35,17 +34,21 @@ const companySchema = z.object({
   address: z
     .string({ required_error: "Preencha o campo endereço!" })
     .min(5, "Mínimo 5 caracteres!"),
-  address_number: number({
-    required_error: "Preencha o campo número!",
-  }),
+  address_number: z
+    .string({
+      required_error: "Preencha o campo número!",
+    })
+    .length(1, "Mínimo 1 dígito!"),
   zipCode: z
     .string({
       required_error: "Preencha o campo CEP!",
     })
-    .length(8, "O CEP deve ter 8 dígitos!"),
-  cellPhone: z.string({
-    required_error: "Preencha o campo telefone!",
-  }),
+    .length(8, "Mínimo 8 dígitos!"),
+  cellPhone: z
+    .string({
+      required_error: "Preencha o campo telefone!",
+    })
+    .length(9, "Mínimo 9 dígitos!"),
   color: z.string({
     required_error: "Selecione uma cor!",
   }),
@@ -58,13 +61,12 @@ function CompanyCreate() {
       name: "",
       email: "",
       address: "",
-      address_number: 0,
+      address_number: "",
       zipCode: "",
       cellPhone: "",
       color: "",
     },
   });
-
   function onSubmit(data: z.infer<typeof companySchema>) {
     console.log(JSON.stringify(data));
   }
@@ -120,7 +122,7 @@ function CompanyCreate() {
               control={form.control}
               name="address"
               render={({ field }) => (
-                <FormItem className="w-4/5 lg:w-2/5">
+                <FormItem className="w-full md:w-full lg:w-full xl:w-2/5 ">
                   <FormLabel>Endereço</FormLabel>
                   <FormControl>
                     <Input
@@ -142,7 +144,7 @@ function CompanyCreate() {
                   <FormControl>
                     <Input
                       className="relative"
-                      placeholder="Digite o número do endereço"
+                      placeholder="Número do endereço"
                       {...field}
                     />
                   </FormControl>
@@ -188,22 +190,29 @@ function CompanyCreate() {
               control={form.control}
               name="color"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cor</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="relative"
-                      placeholder="Informe a cor"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <div className="w-full flex justify-center ">
+                  <FormItem className="w-full md:w-1/2">
+                    <FormLabel>Cor</FormLabel>
+                    <FormControl className="p-1">
+                      <Input type="color" className="relative" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </div>
               )}
             />
-            <Button className="w-full" type="submit">
-              Salvar
-            </Button>
+            <div className="w-full flex justify-center items-center gap-2">
+              <Button
+                variant={"outline"}
+                className="w-1/2 md:w-1/3 text-destructive"
+                type="button"
+              >
+                Cancelar
+              </Button>
+              <Button className="w-1/2 md:w-1/3" type="submit">
+                Salvar
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
