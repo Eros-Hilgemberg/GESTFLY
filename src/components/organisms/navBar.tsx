@@ -9,7 +9,7 @@ function NavBar({ type }: navbarProps) {
   switch (type) {
     case "isLogged":
       return (
-        <nav className="bg-primary text-white text-center gap-2 p-2 flex items-center w-full">
+        <nav className="bg-primary rounded-2xl mt-2 text-white text-center gap-2 p-2 flex items-center mx-2 ">
           <SidebarTrigger />
           <div>
             <h1 className="text-lg font-bold">GESTFLY</h1>

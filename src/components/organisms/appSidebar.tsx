@@ -85,8 +85,8 @@ const itemsFooter = [
 
 export function AppSidebar() {
   return (
-    <Sidebar variant="sidebar" collapsible="icon">
-      <SidebarContent className="bg-card rounded-r-2xl">
+    <Sidebar variant="floating" collapsible="icon">
+      <SidebarContent className="bg-card rounded-2xl">
         <SidebarGroup className="h-full">
           <SidebarGroupLabel className="font-bold text-lg">
             Menu
