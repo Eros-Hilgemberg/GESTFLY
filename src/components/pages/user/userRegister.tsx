@@ -57,7 +57,7 @@ function UserRegister() {
   }
   return (
     <div className="h-screen w-screen">
-      <NavBar isLogged="Voltar" />
+      <NavBar />
       <motion.div
         whileInView={{ opacity: [0.5, 1], scale: [0.8, 1] }}
         transition={{ duration: 0.8 }}

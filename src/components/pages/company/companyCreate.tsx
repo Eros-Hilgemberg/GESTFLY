@@ -137,7 +137,7 @@ function CompanyCreate() {
               control={form.control}
               name="address_number"
               render={({ field }) => (
-                <FormItem className="w-1/5 lg:w-auto">
+                <FormItem className="w-full lg:w-auto">
                   <FormLabel>Número</FormLabel>
                   <FormControl>
                     <Input

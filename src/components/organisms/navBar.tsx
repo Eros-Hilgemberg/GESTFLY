@@ -1,45 +1,47 @@
 import { Link } from "react-router";
 import { Button } from "../ui/button";
+import { SidebarTrigger } from "../ui/sidebar";
 
 interface navbarProps {
   type?: string;
-  isLogged?: string;
 }
-function NavBar({ type, isLogged }: navbarProps) {
+function NavBar({ type }: navbarProps) {
   switch (type) {
+    case "isLogged":
+      return (
+        <nav className="bg-primary text-white text-center gap-2 p-2 flex items-center w-full">
+          <SidebarTrigger />
+          <div>
+            <h1 className="text-lg font-bold">GESTFLY</h1>
+          </div>
+        </nav>
+      );
     default:
       return (
         <nav className="bg-primary text-white p-3 flex justify-between items-center fixed w-full">
           <div>
-            <Link to="/">
-              <h1 className="text-lg font-bold">GESTFLY</h1>
-            </Link>
+            <h1 className="text-lg font-bold">GESTFLY</h1>
           </div>
-          {isLogged ? (
-            <div className="flex">
-              <Link to={"/"}>
-                <Button variant={"secondary"} className="w-30">
-                  {isLogged}
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex justify-between gap-3">
-              <Link to={"/register"}>
-                <Button variant={"secondary"}>Cadastre-se</Button>
-              </Link>
+          <div className="flex justify-between gap-3">
+            {location.pathname == "/" || location.pathname == "/register" ? (
               <Link to="/login">
                 <Button variant={"outline"} className="bg-primary">
                   Login
                 </Button>
               </Link>
-            </div>
-          )}
+            ) : (
+              ""
+            )}
+            {location.pathname == "/" || location.pathname == "/login" ? (
+              <Link to={"/register"}>
+                <Button variant={"secondary"}>Cadastre-se</Button>
+              </Link>
+            ) : (
+              ""
+            )}
+          </div>
         </nav>
       );
-
-    case "company":
-      return <div>Navbar Company</div>;
   }
 }
 
