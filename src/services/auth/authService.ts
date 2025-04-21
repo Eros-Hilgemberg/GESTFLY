@@ -43,7 +43,6 @@ export class AuthService {
         refreshToken,
       }
     );
-
     return data;
   }
 }

@@ -15,9 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/hooks/useAuth";
+import { httpClient } from "@/services/auth/httpClient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 const companySchema = z.object({
   name: z
@@ -38,7 +41,7 @@ const companySchema = z.object({
     .string({
       required_error: "Preencha o campo número!",
     })
-    .length(1, "Mínimo 1 dígito!"),
+    .min(1, "Mínimo 1 dígito!"),
   zipCode: z
     .string({
       required_error: "Preencha o campo CEP!",
@@ -55,6 +58,7 @@ const companySchema = z.object({
 });
 
 function CompanyCreate() {
+  const { signedUserId } = useAuth();
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: {
@@ -67,8 +71,20 @@ function CompanyCreate() {
       color: "",
     },
   });
-  function onSubmit(data: z.infer<typeof companySchema>) {
-    console.log(JSON.stringify(data));
+  async function onSubmit(data: z.infer<typeof companySchema>) {
+    try {
+      await httpClient
+        .post("/company", {
+          ...data,
+          UserId: signedUserId,
+        })
+        .then((response) => {
+          toast.success("Registro realizado com sucesso!");
+        });
+    } catch (error) {
+      console.log(error);
+      toast.error("Falha ao realizar registro!");
+    }
   }
   return (
     <motion.div

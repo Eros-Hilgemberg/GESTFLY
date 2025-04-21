@@ -7,21 +7,38 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import { httpClient } from "@/services/auth/httpClient";
+import { CompanyType } from "@/types/companyType";
 
 import { company } from "@/types/data/company";
 import { PlusCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 function User() {
   const { signedUserId } = useAuth();
+  const [companys, setCompanys] = useState<CompanyType[]>([]);
+  console.log("teste:" + signedUserId);
+  async function getItems() {
+    await httpClient
+      .get(`/company?userId=8324b1e2-c046-4a66-ad6f-089c517cf7f5`)
+      .then((response) => {
+        setCompanys(response.data);
+      })
+      .catch((err) => {
+        toast.error("erro");
+        console.log(err);
+      });
+  }
   useEffect(() => {
-    console.log("teste:" + signedUserId);
+    getItems();
   }, []);
+
   return (
     <div className="flex flex-col grow-1">
-      <CardHeader className="flex justify-between">
+      <CardHeader className="flex justify-between mb-5">
         <div>
           <CardTitle className="">Empresas</CardTitle>
           <CardDescription>Selecione a empresa:</CardDescription>
@@ -47,6 +64,7 @@ function User() {
           >
             <ItemCard
               id={comp.userId}
+              image={comp.image}
               name={comp.name}
               description={comp.address}
             />
