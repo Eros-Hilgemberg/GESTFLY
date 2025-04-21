@@ -20,6 +20,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/hooks/useAuth";
 import { CurrencyCircleDollar } from "@phosphor-icons/react";
 
 // Menu items.
@@ -70,20 +71,21 @@ const items = [
 
 const itemsFooter = [
   {
-    title: "Sair",
-    url: "/logout",
-    icon: SignOut,
-    subtitle: "Menu de vendas",
-  },
-  {
     title: "Configurações",
     url: "/config",
     icon: Gear,
     subtitle: "Acesse as configurações",
   },
+  {
+    title: "Sair",
+    url: "/login",
+    icon: SignOut,
+    subtitle: "Menu de vendas",
+  },
 ];
 
 export function AppSidebar() {
+  const { signOut } = useAuth();
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent className="bg-card rounded-2xl">
@@ -119,6 +121,7 @@ export function AppSidebar() {
                         ? "font-semibold text-destructive"
                         : "font-semibold"
                     }
+                    onClick={() => signOut()}
                     asChild
                   >
                     <a className="h-12" href={itemFooter.url}>

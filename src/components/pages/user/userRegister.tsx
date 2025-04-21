@@ -22,6 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const userSchema = z.object({
@@ -44,6 +46,7 @@ const userSchema = z.object({
 });
 
 function UserRegister() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -56,10 +59,11 @@ function UserRegister() {
   async function onSubmit(data: z.infer<typeof userSchema>) {
     try {
       await AuthService.signUp(data).then((response) => {
-        console.log(response);
+        toast.success("Registro realizado com sucesso!");
+        navigate("/user");
       });
     } catch (error) {
-      console.error("Erro ao realizar login:", error);
+      toast.error("Falha ao realizar o registro!Tente novamente");
     }
   }
   return (

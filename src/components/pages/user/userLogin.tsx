@@ -17,12 +17,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthService } from "@/services/auth/authService";
+import { useAuth } from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const userSchema = z.object({
@@ -40,7 +41,8 @@ const userSchema = z.object({
 });
 
 function UserLogin() {
-  let navigate = useNavigate();
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -51,9 +53,14 @@ function UserLogin() {
 
   async function onSubmit(data: z.infer<typeof userSchema>) {
     try {
-      await AuthService.signIn(data).then((response) => {});
+      await signIn(data.email, data.password).then((response) => {
+        toast.success("Sucesso ao realizar login!");
+        navigate("/user");
+        return;
+      });
     } catch (error) {
-      console.error("Erro ao realizar login:", error);
+      toast.error("Falha ao realizar login! E-mail ou senha incorretos.");
+      return;
     }
   }
   return (
