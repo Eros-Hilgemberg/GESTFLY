@@ -6,13 +6,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 import { company } from "@/types/data/company";
 import { PlusCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { Link } from "react-router";
 
 function User() {
+  const { signedUserId } = useAuth();
+  useEffect(() => {
+    console.log("teste:" + signedUserId);
+  }, []);
   return (
     <div className="flex flex-col grow-1">
       <CardHeader className="flex justify-between">

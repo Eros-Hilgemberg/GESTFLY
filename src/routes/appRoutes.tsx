@@ -12,6 +12,7 @@ import UserLogin from "@/components/pages/user/userLogin";
 import UserRegister from "@/components/pages/user/userRegister";
 import BasePageLayout from "@/components/templates/basePageLayout";
 import { createBrowserRouter } from "react-router";
+import { AuthGuard } from "./authGuard";
 
 export const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -19,16 +20,21 @@ export const router = createBrowserRouter([
   { path: "/register", element: <UserRegister /> },
   { path: "/login", element: <UserLogin /> },
   {
-    Component: BasePageLayout,
+    element: <AuthGuard isPrivate />,
     children: [
-      { path: "/user", element: <User /> },
-      { path: "/user/company/create", element: <CompanyCreate /> },
-      { path: "/home", element: <Home /> },
-      { path: "/products", element: <Products /> },
-      { path: "/products/create", element: <ProductCreate /> },
-      { path: "/services", element: <Services /> },
-      { path: "/services/create", element: <ServiceCreate /> },
-      { path: "/config", element: <Config /> },
+      {
+        Component: BasePageLayout,
+        children: [
+          { path: "/user", element: <User /> },
+          { path: "/user/company/create", element: <CompanyCreate /> },
+          { path: "/home", element: <Home /> },
+          { path: "/products", element: <Products /> },
+          { path: "/products/create", element: <ProductCreate /> },
+          { path: "/services", element: <Services /> },
+          { path: "/services/create", element: <ServiceCreate /> },
+          { path: "/config", element: <Config /> },
+        ],
+      },
     ],
   },
 ]);

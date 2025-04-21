@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { API } from "@/utils/axiosConfig";
+import { AuthService } from "@/services/auth/authService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
@@ -55,8 +55,9 @@ function UserRegister() {
 
   async function onSubmit(data: z.infer<typeof userSchema>) {
     try {
-      const response = await API.post("/auth/sign-up", data);
-      console.log(response.data);
+      await AuthService.signUp(data).then((response) => {
+        console.log(response);
+      });
     } catch (error) {
       console.error("Erro ao realizar login:", error);
     }
