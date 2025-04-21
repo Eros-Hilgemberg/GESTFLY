@@ -20,7 +20,6 @@ import { toast } from "sonner";
 function User() {
   const { signedUserId } = useAuth();
   const [companys, setCompanys] = useState<CompanyType[]>([]);
-  console.log("teste:" + signedUserId);
   async function getItems() {
     await httpClient
       .get(`/company?userId=8324b1e2-c046-4a66-ad6f-089c517cf7f5`)
@@ -35,6 +34,10 @@ function User() {
   useEffect(() => {
     getItems();
   }, []);
+
+  async function deleteItem(id: string) {
+    alert("produto deletado!" + id);
+  }
 
   return (
     <div className="flex flex-col grow-1">
@@ -63,6 +66,7 @@ function User() {
             transition={{ duration: 0.8 }}
           >
             <ItemCard
+              deleteItem={deleteItem}
               id={comp.userId}
               image={comp.image}
               name={comp.name}

@@ -1,4 +1,10 @@
 import { Info, PencilSimple, TrashSimple } from "@phosphor-icons/react";
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogTitle,
+} from "@radix-ui/react-dialog";
 import { Link } from "react-router";
 import { Button } from "../ui/button";
 import {
@@ -8,14 +14,21 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import {
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "../ui/dialog";
 
 interface ItemCardProps {
   id: string;
   name: string;
   description: string;
   image?: string;
+  deleteItem: (id: string) => void;
 }
-function ItemCard({ name, description, image }: ItemCardProps) {
+function ItemCard({ id, deleteItem, name, description, image }: ItemCardProps) {
   console.log(image);
   return (
     <Card className="flex flex-col md:flex-row justify-between">
@@ -48,11 +61,36 @@ function ItemCard({ name, description, image }: ItemCardProps) {
             <PencilSimple className="flex-1" />
           </Button>
         </Link>
-        <Link to="">
-          <Button variant={"destructive"}>
-            <TrashSimple className="flex-1" color="white" />
-          </Button>
-        </Link>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={"destructive"}>
+              <TrashSimple className="flex-1" color="white" />
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Deletar item</DialogTitle>
+              <DialogDescription>
+                Tem certeza que gostaria de deletar {name}?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="sm:justify-start">
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Close
+                </Button>
+              </DialogClose>
+              <Button
+                onClick={() => deleteItem(id)}
+                type="button"
+                variant="destructive"
+              >
+                Confirmar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardFooter>
     </Card>
   );
