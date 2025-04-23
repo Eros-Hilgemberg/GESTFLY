@@ -17,9 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { httpClient } from "@/services/auth/httpClient";
+import { getToken } from "@/services/controller/Controller";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 const companySchema = z.object({
@@ -37,8 +40,8 @@ const companySchema = z.object({
   address: z
     .string({ required_error: "Preencha o campo endereço!" })
     .min(5, "Mínimo 5 caracteres!"),
-  address_number: z
-    .string({
+  addressNumber: z
+    .number({
       required_error: "Preencha o campo número!",
     })
     .min(1, "Mínimo 1 dígito!"),
@@ -58,32 +61,48 @@ const companySchema = z.object({
 });
 
 function CompanyCreate() {
-  const { signedUserId } = useAuth();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: {
       name: "",
       email: "",
       address: "",
-      address_number: "",
+      addressNumber: 0,
       zipCode: "",
       cellPhone: "",
       color: "",
     },
   });
+  const { signedUserId } = useAuth();
   async function onSubmit(data: z.infer<typeof companySchema>) {
+    const userId = signedUserId;
+    const token = getToken();
     try {
-      await httpClient
-        .post("/company", {
-          ...data,
-          UserId: signedUserId,
-        })
-        .then((response) => {
-          toast.success("Registro realizado com sucesso!");
-        });
-    } catch (error) {
-      console.log(error);
-      toast.error("Falha ao realizar registro!");
+      const response = await httpClient.post(
+        "/company",
+        { ...data, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      navigate("/user");
+      toast.success("Registro " + data.name + " salvo com sucesso!");
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error("Erro ao salvar registro!");
+        console.error(
+          "Erro na resposta da API:",
+          error.response?.data || error.message
+        );
+      } else {
+        console.error("Erro desconhecido:", error);
+      }
+      throw error;
     }
   }
   return (
@@ -153,7 +172,7 @@ function CompanyCreate() {
             />
             <FormField
               control={form.control}
-              name="address_number"
+              name="addressNumber"
               render={({ field }) => (
                 <FormItem className="w-full lg:w-auto">
                   <FormLabel>Número</FormLabel>
@@ -162,6 +181,7 @@ function CompanyCreate() {
                       className="relative"
                       placeholder="Número do endereço"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
                   <FormMessage />
@@ -222,6 +242,7 @@ function CompanyCreate() {
                 variant={"outline"}
                 className="w-1/2 md:w-1/3 text-destructive"
                 type="button"
+                onClick={() => navigate("/user")}
               >
                 Cancelar
               </Button>

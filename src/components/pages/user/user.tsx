@@ -7,32 +7,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
-import { httpClient } from "@/services/auth/httpClient";
+import getItems from "@/services/controller/getItems";
 import { CompanyType } from "@/types/companyType";
-
-import { company } from "@/types/data/company";
 import { PlusCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { toast } from "sonner";
 
 function User() {
-  const { signedUserId } = useAuth();
   const [companys, setCompanys] = useState<CompanyType[]>([]);
-  async function getItems() {
-    await httpClient
-      .get(`/company?userId=8324b1e2-c046-4a66-ad6f-089c517cf7f5`)
-      .then((response) => {
-        setCompanys(response.data);
-      })
-      .catch((err) => {
-        toast.error("erro");
-        console.log(err);
-      });
+  const { signedUserId } = useAuth();
+  async function getCompany(signedUserId: string) {
+    const data = await getItems(`/company?userId=${signedUserId}`);
+    setCompanys(await data);
   }
   useEffect(() => {
-    getItems();
+    console.log("teste" + signedUserId);
+    getCompany(signedUserId);
   }, []);
 
   async function deleteItem(id: string) {
@@ -56,7 +47,7 @@ function User() {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col py-3 gap-3 scroll-auto overflow-y-auto bg-background">
-        {company.map((comp) => (
+        {companys.map((comp) => (
           <motion.div
             key={comp.userId}
             whileInView={{
@@ -68,7 +59,7 @@ function User() {
             <ItemCard
               deleteItem={deleteItem}
               id={comp.userId}
-              image={comp.image}
+              image={comp.photo}
               name={comp.name}
               description={comp.address}
             />

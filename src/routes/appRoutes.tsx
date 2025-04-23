@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
   { path: "/register", element: <UserRegister /> },
   { path: "/login", element: <UserLogin /> },
   {
-    element: <AuthGuard isPrivate={false} />,
+    element: <AuthGuard isPrivate />,
     children: [
       {
         Component: BasePageLayout,
