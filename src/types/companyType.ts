@@ -1,4 +1,5 @@
 export type CompanyType = {
+  id: string;
   userId: string;
   name: string;
   address: string;

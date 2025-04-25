@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
         Component: BasePageLayout,
         children: [
           { path: "/user", element: <User /> },
-          { path: "/user/company/create", element: <CompanyCreate /> },
+          { path: "/user/company/create/:id?", element: <CompanyCreate /> },
           { path: "/home", element: <Home /> },
           { path: "/products", element: <Products /> },
           { path: "/products/create", element: <ProductCreate /> },

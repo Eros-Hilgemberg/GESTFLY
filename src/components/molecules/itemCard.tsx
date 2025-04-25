@@ -5,7 +5,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@radix-ui/react-dialog";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -29,9 +29,9 @@ interface ItemCardProps {
   deleteItem: (id: string) => void;
 }
 function ItemCard({ id, deleteItem, name, description, image }: ItemCardProps) {
-  console.log(image);
+  const navigate = useNavigate();
   return (
-    <Card className="flex flex-col md:flex-row justify-between">
+    <Card className="flex flex-col md:flex-row justify-between ">
       <CardHeader className="justify-center md:justify-start flex-1 flex h-full gap-5 items-center">
         <div className="w-15 h-15 bg-red-300 rounded-2xl">
           {image ? (
@@ -50,13 +50,13 @@ function ItemCard({ id, deleteItem, name, description, image }: ItemCardProps) {
           </CardDescription>
         </span>
       </CardHeader>
-      <CardFooter className="flex md:flex-row gap-2 justify-center items-center">
+      <CardFooter className="flex md:flex-row gap-2 justify-center items-center ">
         <Link to="">
           <Button variant={"outline"}>
             <Info className="flex-1" />
           </Button>
         </Link>
-        <Link to="">
+        <Link to={`/user/company/create/id=${id}`}>
           <Button variant={"outline"}>
             <PencilSimple className="flex-1" />
           </Button>
@@ -75,19 +75,21 @@ function ItemCard({ id, deleteItem, name, description, image }: ItemCardProps) {
                 Tem certeza que gostaria de deletar {name}?
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="sm:justify-start">
+            <DialogFooter className="">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Close
                 </Button>
               </DialogClose>
-              <Button
-                onClick={() => deleteItem(id)}
-                type="button"
-                variant="destructive"
-              >
-                Confirmar
-              </Button>
+              <DialogClose asChild>
+                <Button
+                  onClick={() => deleteItem(id)}
+                  type="button"
+                  variant="destructive"
+                >
+                  Confirmar
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </DialogContent>
         </Dialog>

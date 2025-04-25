@@ -14,6 +14,7 @@ interface ISignInDTO {
 interface ISignInResponse {
   accessToken: string;
   refreshToken: string;
+  signedUserId: string;
 }
 
 export class AuthService {

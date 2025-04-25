@@ -31,6 +31,11 @@ const productSchema = z.object({
   price: z.string({
     required_error: "Preencha o campo preço!",
   }),
+  quantity: z
+    .number({
+      required_error: "Preencha o campo quantidade!",
+    })
+    .min(1, "Mínimo 1 dígito!"),
 });
 
 function ProductCreate() {
@@ -40,6 +45,7 @@ function ProductCreate() {
       name: "",
       price: "",
       description: "",
+      quantity: 0,
     },
   });
   function onSubmit(data: z.infer<typeof productSchema>) {
@@ -99,6 +105,24 @@ function ProductCreate() {
                   <FormLabel>Preço(R$)</FormLabel>
                   <FormControl>
                     <Input placeholder="Digite o preço do produto" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem className="w-full lg:w-2/5">
+                  <FormLabel>Quantidade</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="relative"
+                      placeholder="Quantidade"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

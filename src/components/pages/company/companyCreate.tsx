@@ -15,14 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/hooks/useAuth";
-import { httpClient } from "@/services/auth/httpClient";
-import { getToken } from "@/services/controller/Controller";
+import { getUserId } from "@/services/assistants/getLocalsStorage";
+import { onPost } from "@/services/assistants/onPost";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 const companySchema = z.object({
@@ -62,6 +61,7 @@ const companySchema = z.object({
 
 function CompanyCreate() {
   const navigate = useNavigate();
+  const [searchParams, setParams] = useSearchParams();
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: {
@@ -74,36 +74,25 @@ function CompanyCreate() {
       color: "",
     },
   });
-  const { signedUserId } = useAuth();
+  async function getCompany() {
+    console.log(searchParams.get("id"));
+
+    //const data = await getItems(`/company/${idCompany}`);
+    //console.log(data);
+  }
+  useEffect(() => {
+    getCompany();
+  }, []);
   async function onSubmit(data: z.infer<typeof companySchema>) {
-    const userId = signedUserId;
-    const token = getToken();
-    try {
-      const response = await httpClient.post(
-        "/company",
-        { ...data, userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      navigate("/user");
-      toast.success("Registro " + data.name + " salvo com sucesso!");
-      return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    const userId = getUserId();
+    await onPost({ ...data, userId }, "/company")
+      .then(() => {
+        toast.success("Registro salvo com sucesso");
+        navigate("/user");
+      })
+      .catch(() => {
         toast.error("Erro ao salvar registro!");
-        console.error(
-          "Erro na resposta da API:",
-          error.response?.data || error.message
-        );
-      } else {
-        console.error("Erro desconhecido:", error);
-      }
-      throw error;
-    }
+      });
   }
   return (
     <motion.div

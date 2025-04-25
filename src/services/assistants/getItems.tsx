@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { httpClient } from "../auth/httpClient";
-import { getToken } from "./Controller";
+import { getToken } from "./getLocalsStorage";
 
 export async function getItems(url: string) {
   const token = getToken();
@@ -27,5 +27,3 @@ export async function getItems(url: string) {
     throw error;
   }
 }
-
-export default getItems;

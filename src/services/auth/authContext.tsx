@@ -76,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     const decoded = jwtDecode<{ sub: string }>(accessToken);
     setSignedUserId(decoded.sub);
+    localStorage.setItem(storageKeys.signedUserId, decoded.sub);
     localStorage.setItem(storageKeys.accessToken, accessToken);
     localStorage.setItem(storageKeys.refreshToken, refreshToken);
     setSignedIn(true);

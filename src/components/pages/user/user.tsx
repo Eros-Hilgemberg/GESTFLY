@@ -6,30 +6,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
-import getItems from "@/services/controller/getItems";
+import { getItems } from "@/services/assistants/getItems";
+import { getUserId } from "@/services/assistants/getLocalsStorage";
+import { deleteItem } from "@/services/assistants/onDelete";
 import { CompanyType } from "@/types/companyType";
 import { PlusCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 function User() {
   const [companys, setCompanys] = useState<CompanyType[]>([]);
-  const { signedUserId } = useAuth();
-  async function getCompany(signedUserId: string) {
-    const data = await getItems(`/company?userId=${signedUserId}`);
+  const userId = getUserId();
+  async function getCompany(userId: string | null) {
+    const data = await getItems(`/company?userId=${userId}`);
     setCompanys(await data);
   }
   useEffect(() => {
-    console.log("teste" + signedUserId);
-    getCompany(signedUserId);
+    getCompany(userId);
   }, []);
-
-  async function deleteItem(id: string) {
-    alert("produto deletado!" + id);
+  async function deleteCompany(id: string) {
+    await deleteItem(`/company/${id}`)
+      .then(() => {
+        getCompany(userId);
+        toast.success("Registro apagado com sucesso");
+      })
+      .catch(() => {
+        toast.error("Erro ao apagar registro!");
+      });
   }
-
   return (
     <div className="flex flex-col grow-1">
       <CardHeader className="flex justify-between mb-5">
@@ -49,7 +55,7 @@ function User() {
       <CardContent className="flex flex-col py-3 gap-3 scroll-auto overflow-y-auto bg-background">
         {companys.map((comp) => (
           <motion.div
-            key={comp.userId}
+            key={comp.id}
             whileInView={{
               y: [-10, 10],
               opacity: [0.5, 1],
@@ -57,8 +63,10 @@ function User() {
             transition={{ duration: 0.8 }}
           >
             <ItemCard
-              deleteItem={deleteItem}
-              id={comp.userId}
+              deleteItem={() => {
+                deleteCompany(comp.id);
+              }}
+              id={comp.id}
               image={comp.photo}
               name={comp.name}
               description={comp.address}
