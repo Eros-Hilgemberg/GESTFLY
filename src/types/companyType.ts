@@ -7,4 +7,5 @@ export type CompanyType = {
   zipCode: string;
   cellPhone: string;
   photo: string;
+  color: string;
 };

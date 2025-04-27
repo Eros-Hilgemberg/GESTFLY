@@ -8,16 +8,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { produtos } from "@/types/data/products";
+import { getItems } from "@/services/assistants/getItems";
+import { getCompany } from "@/services/assistants/getLocalsStorage";
+import { deleteItem } from "@/services/assistants/onDelete";
 import { ProductType } from "@/types/productType";
 import { PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 function Services() {
-  const [services, setServices] = useState<ProductType[]>(produtos);
-  async function deleteItem(id: string) {
-    alert("produto deletado!" + id);
+  const [services, setServices] = useState<ProductType[]>();
+  const dataCompany = getCompany();
+  async function getServices(companyId: string | null) {
+    const data = await getItems(`/service?companyId=${companyId}`);
+    setServices(await data);
+  }
+  useEffect(() => {
+    getServices(dataCompany?.id);
+  }, []);
+  async function deleteService(id: string) {
+    getServices(dataCompany?.id);
+    await deleteItem(`/service/${id}`);
   }
   return (
     <div className="flex flex-col grow-1">
@@ -36,7 +47,7 @@ function Services() {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col py-3 gap-3 scroll-auto overflow-y-auto bg-background">
-        {services.map((service) => (
+        {services?.map((service) => (
           <motion.div
             key={service.id}
             whileInView={{
@@ -46,7 +57,8 @@ function Services() {
             transition={{ duration: 0.8 }}
           >
             <ItemCard
-              deleteItem={deleteItem}
+              deleteItem={() => deleteService(service.id)}
+              linkUpdate={`/services/create/${service.id}`}
               id={service.id}
               image={service.photo ?? ""}
               name={service.name}

@@ -12,7 +12,7 @@ export async function getItems(url: string) {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -22,6 +22,7 @@ export async function getItems(url: string) {
         error.response?.data || error.message
       );
     } else {
+      toast.error("Erro desconhecido ao carregar registros");
       console.error("Erro desconhecido:", error);
     }
     throw error;

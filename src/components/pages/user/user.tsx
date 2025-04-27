@@ -10,15 +10,17 @@ import { getItems } from "@/services/assistants/getItems";
 import { getUserId } from "@/services/assistants/getLocalsStorage";
 import { deleteItem } from "@/services/assistants/onDelete";
 import { CompanyType } from "@/types/companyType";
+import { setCompany } from "@/utils/companyContext";
 import { PlusCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 function User() {
   const [companys, setCompanys] = useState<CompanyType[]>([]);
   const userId = getUserId();
+  const navigate = useNavigate();
   async function getCompany(userId: string | null) {
     const data = await getItems(`/company?userId=${userId}`);
     setCompanys(await data);
@@ -35,6 +37,11 @@ function User() {
       .catch(() => {
         toast.error("Erro ao apagar registro!");
       });
+  }
+  async function selectCompany(data: CompanyType) {
+    setCompany(data);
+    navigate("/home");
+    window.location.reload();
   }
   return (
     <div className="flex flex-col grow-1">
@@ -61,11 +68,13 @@ function User() {
               opacity: [0.5, 1],
             }}
             transition={{ duration: 0.8 }}
+            onDoubleClick={() => selectCompany(comp)}
           >
             <ItemCard
               deleteItem={() => {
                 deleteCompany(comp.id);
               }}
+              linkUpdate={`/user/company/create/${comp.id}`}
               id={comp.id}
               image={comp.photo}
               name={comp.name}

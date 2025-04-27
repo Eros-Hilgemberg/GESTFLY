@@ -15,21 +15,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { getItems } from "@/services/assistants/getItems";
 import { getUserId } from "@/services/assistants/getLocalsStorage";
 import { onPost } from "@/services/assistants/onPost";
+import { onPut } from "@/services/assistants/onPut";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router";
-import { toast } from "sonner";
+import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 const companySchema = z.object({
   name: z
     .string({
       required_error: "Preencha o campo nome!",
     })
-    .min(5, "Mínimo 5 caracteres!"),
+    .min(3, "Mínimo 3 caracteres!"),
   email: z
     .string({
       required_error: "Preencha o campo email!",
@@ -48,7 +49,7 @@ const companySchema = z.object({
     .string({
       required_error: "Preencha o campo CEP!",
     })
-    .length(8, "Mínimo 8 dígitos!"),
+    .length(8, "CEP deve conter 8 caracteres!"),
   cellPhone: z
     .string({
       required_error: "Preencha o campo telefone!",
@@ -61,7 +62,7 @@ const companySchema = z.object({
 
 function CompanyCreate() {
   const navigate = useNavigate();
-  const [searchParams, setParams] = useSearchParams();
+  const { id } = useParams();
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: {
@@ -74,25 +75,34 @@ function CompanyCreate() {
       color: "",
     },
   });
-  async function getCompany() {
-    console.log(searchParams.get("id"));
-
-    //const data = await getItems(`/company/${idCompany}`);
-    //console.log(data);
-  }
   useEffect(() => {
-    getCompany();
+    if (id) {
+      const fetchData = async () => {
+        await getItems(`/company/${id}`).then((response) => {
+          form.setValue("name", response.name);
+          form.setValue("email", response.email);
+          form.setValue("address", response.address);
+          form.setValue("addressNumber", response.addressNumber);
+          form.setValue("zipCode", response.zipCode);
+          form.setValue("cellPhone", response.cellPhone);
+          form.setValue("color", response.color);
+        });
+      };
+      fetchData();
+    }
+    return;
   }, []);
   async function onSubmit(data: z.infer<typeof companySchema>) {
     const userId = getUserId();
-    await onPost({ ...data, userId }, "/company")
-      .then(() => {
-        toast.success("Registro salvo com sucesso");
+    if (id) {
+      await onPut({ ...data }, `/company/${id}`).then(() => {
         navigate("/user");
-      })
-      .catch(() => {
-        toast.error("Erro ao salvar registro!");
       });
+    } else {
+      await onPost({ ...data, userId }, "/company").then(() => {
+        navigate("/user");
+      });
+    }
   }
   return (
     <motion.div
@@ -168,6 +178,7 @@ function CompanyCreate() {
                   <FormControl>
                     <Input
                       className="relative"
+                      type="number"
                       placeholder="Número do endereço"
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}

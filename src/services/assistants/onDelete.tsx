@@ -12,6 +12,7 @@ export async function deleteItem(url: string) {
         "Content-Type": "application/json",
       },
     });
+    toast.success("Registro deletado com sucesso!");
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -20,8 +21,10 @@ export async function deleteItem(url: string) {
         "Erro na resposta da API:",
         error.response?.data || error.message
       );
+      console.error("Erro desconhecido:", error);
     } else {
       console.error("Erro desconhecido:", error);
+      toast.error("Erro desconhecido ao deletar registro!");
     }
     throw error;
   }

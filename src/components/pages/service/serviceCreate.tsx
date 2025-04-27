@@ -15,9 +15,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { getItems } from "@/services/assistants/getItems";
+import { getCompany } from "@/services/assistants/getLocalsStorage";
+import { onPost } from "@/services/assistants/onPost";
+import { onPut } from "@/services/assistants/onPut";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 const serviceSchema = z.object({
   name: z
@@ -29,29 +35,55 @@ const serviceSchema = z.object({
     .string({ required_error: "Preencha o campo descrição!" })
     .min(5, "Mínimo 5 caracteres!"),
   price: z
-    .string({
+    .number({
       required_error: "Preencha o campo duração",
     })
     .min(1, "Mínimo 1 caracter!"),
   expectedMinutes: z
-    .string({
+    .number({
       required_error: "Preencha o campo duração",
     })
     .min(1, "Mínimo 1 caracter!"),
 });
 
 function ServiceCreate() {
+  const navigate = useNavigate();
+  const dataCompany = getCompany();
+  const { id } = useParams();
   const form = useForm<z.infer<typeof serviceSchema>>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       name: "",
-      price: "",
+      price: 0,
       description: "",
-      expectedMinutes: "",
+      expectedMinutes: 0,
     },
   });
-  function onSubmit(data: z.infer<typeof serviceSchema>) {
-    console.log(JSON.stringify(data));
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        await getItems(`/service/${id}`).then((response) => {
+          form.setValue("name", response.name);
+          form.setValue("price", response.price);
+          form.setValue("description", response.description);
+          form.setValue("expectedMinutes", response.expectedMinutes);
+        });
+      };
+      fetchData();
+    }
+    return;
+  }, []);
+  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+    const companyId = dataCompany?.id;
+    if (id) {
+      await onPut({ ...data, companyId }, `/service/${id}`).then(() => {
+        navigate("/services");
+      });
+    } else {
+      await onPost({ ...data, companyId }, "/service").then(() => {
+        navigate("/services");
+      });
+    }
   }
   return (
     <motion.div
@@ -110,6 +142,7 @@ function ServiceCreate() {
                       type="number"
                       placeholder="Digite o preço"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
                   <FormMessage />
@@ -127,6 +160,7 @@ function ServiceCreate() {
                       type="number"
                       placeholder="Digite o tempo necessário"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
                   <FormMessage />
@@ -139,6 +173,7 @@ function ServiceCreate() {
                 variant={"outline"}
                 className="w-1/2 md:w-1/3 text-destructive"
                 type="button"
+                onClick={() => navigate("/services")}
               >
                 Cancelar
               </Button>

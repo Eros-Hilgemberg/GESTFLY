@@ -15,9 +15,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { getItems } from "@/services/assistants/getItems";
+import { getCompany } from "@/services/assistants/getLocalsStorage";
+import { onPost } from "@/services/assistants/onPost";
+import { onPut } from "@/services/assistants/onPut";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 const productSchema = z.object({
   name: z
@@ -28,9 +34,11 @@ const productSchema = z.object({
   description: z
     .string({ required_error: "Preencha o campo descrição!" })
     .min(5, "Mínimo 5 caracteres!"),
-  price: z.string({
-    required_error: "Preencha o campo preço!",
-  }),
+  price: z
+    .number({
+      required_error: "Preencha o campo preço!",
+    })
+    .min(1, "Mínimo 1 dígito!"),
   quantity: z
     .number({
       required_error: "Preencha o campo quantidade!",
@@ -39,17 +47,43 @@ const productSchema = z.object({
 });
 
 function ProductCreate() {
+  const navigate = useNavigate();
+  const dataCompany = getCompany();
+  const { id } = useParams();
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
-      price: "",
+      price: 0,
       description: "",
       quantity: 0,
     },
   });
-  function onSubmit(data: z.infer<typeof productSchema>) {
-    console.log(JSON.stringify(data));
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        await getItems(`/product/${id}`).then((response) => {
+          form.setValue("name", response.name);
+          form.setValue("price", response.price);
+          form.setValue("description", response.description);
+          form.setValue("quantity", response.quantity);
+        });
+      };
+      fetchData();
+    }
+    return;
+  }, []);
+  async function onSubmit(data: z.infer<typeof productSchema>) {
+    const companyId = dataCompany?.id;
+    if (id) {
+      await onPut({ ...data, companyId }, `/product/${id}`).then(() => {
+        navigate("/products");
+      });
+    } else {
+      await onPost({ ...data, companyId }, "/product").then(() => {
+        navigate("/products");
+      });
+    }
   }
   return (
     <motion.div
@@ -104,7 +138,12 @@ function ProductCreate() {
                 <FormItem className="w-full md:w-full lg:w-full xl:w-2/5">
                   <FormLabel>Preço(R$)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite o preço do produto" {...field} />
+                    <Input
+                      placeholder="Digite o preço do produto"
+                      {...field}
+                      type="number"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -118,7 +157,7 @@ function ProductCreate() {
                   <FormLabel>Quantidade</FormLabel>
                   <FormControl>
                     <Input
-                      className="relative"
+                      type="number"
                       placeholder="Quantidade"
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
@@ -134,6 +173,7 @@ function ProductCreate() {
                 variant={"outline"}
                 className="w-1/2 md:w-1/3 text-destructive"
                 type="button"
+                onClick={() => navigate("/products")}
               >
                 Cancelar
               </Button>
