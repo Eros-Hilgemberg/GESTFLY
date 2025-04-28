@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getItems } from "@/services/assistants/getItems";
-import { getUserId } from "@/services/assistants/getLocalsStorage";
-import { deleteItem } from "@/services/assistants/onDelete";
+import { getItems } from "@/services/Helpers/getItems";
+import { getUserId } from "@/services/Helpers/getLocalsStorage";
+import { deleteItem } from "@/services/Helpers/onDelete";
 import { CompanyType } from "@/types/companyType";
 import { setCompany } from "@/utils/companyContext";
 import { PlusCircle } from "@phosphor-icons/react";

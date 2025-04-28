@@ -1,4 +1,4 @@
-import { getCompany } from "@/services/assistants/getLocalsStorage";
+import { getCompany } from "@/services/Helpers/getLocalsStorage";
 import { CompanyType } from "@/types/companyType";
 import { Link } from "react-router";
 import { Button } from "../ui/button";
@@ -13,12 +13,12 @@ function NavBar({ type }: navbarProps) {
     case "isLogged":
       return (
         <nav
-          className="bg-primary rounded-2xl mt-2 text-white text-center gap-2 p-2 flex items-center mx-2"
+          className="bg-primary rounded-2xl mt-2 text-white text-center gap-2 p-2 flex items-center mx-2 shadow-sm"
           style={{ backgroundColor: dataCompany.color }}
         >
           <SidebarTrigger />
           <div>
-            <h1 className="text-lg font-bold">GESTFLY</h1>
+            <h1 className="text-lg font-bold">{dataCompany.name}</h1>
           </div>
         </nav>
       );

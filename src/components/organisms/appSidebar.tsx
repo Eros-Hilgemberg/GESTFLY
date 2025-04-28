@@ -21,7 +21,8 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
-import { CurrencyCircleDollar } from "@phosphor-icons/react";
+import { getCompany } from "@/services/Helpers/getLocalsStorage";
+import { CompanyType } from "@/types/companyType";
 
 // Menu items.
 const items = [
@@ -30,12 +31,6 @@ const items = [
     url: "/home",
     icon: House,
     subtitle: "Página Inicial",
-  },
-  {
-    title: "Vendas",
-    url: "/sales",
-    icon: CurrencyCircleDollar,
-    subtitle: "Menu de vendas",
   },
   {
     title: "Agendamentos",
@@ -86,6 +81,7 @@ const itemsFooter = [
 
 export function AppSidebar() {
   const { signOut } = useAuth();
+  const dataCompany: Partial<CompanyType> = getCompany() || {};
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent className="bg-card rounded-2xl">
@@ -94,6 +90,18 @@ export function AppSidebar() {
             Menu
           </SidebarGroupLabel>
           <SidebarSeparator />
+          <div className="flex justify-center mt-4">
+            <div className=" group-data-[collapsible=icon]:size-6 w-20 h-20 rounded-2xl ">
+              {dataCompany?.photo ? (
+                <img
+                  src={"data:image/png;base64," + dataCompany?.photo}
+                  className="rounded-2xl"
+                />
+              ) : (
+                <img src="public/img/empty.png" alt="imagem" />
+              )}
+            </div>
+          </div>
           <SidebarGroupContent className="flex flex-col justify-between grow-1">
             {location.pathname.match("/user") ? (
               ""

@@ -8,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getItems } from "@/services/assistants/getItems";
-import { getCompany } from "@/services/assistants/getLocalsStorage";
-import { deleteItem } from "@/services/assistants/onDelete";
+import { getItems } from "@/services/Helpers/getItems";
+import { getCompany } from "@/services/Helpers/getLocalsStorage";
+import { deleteItem } from "@/services/Helpers/onDelete";
 import { ProductType } from "@/types/productType";
 import { PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
