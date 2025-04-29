@@ -11,13 +11,13 @@ import {
 import { getItems } from "@/services/Helpers/getItems";
 import { getCompany } from "@/services/Helpers/getLocalsStorage";
 import { deleteItem } from "@/services/Helpers/onDelete";
-import { ProductType } from "@/types/productType";
+import { ServiceType } from "@/types/serviceType";
 import { PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 function Services() {
-  const [services, setServices] = useState<ProductType[]>();
+  const [services, setServices] = useState<ServiceType[]>();
   const [search, setSearch] = useState("");
   const dataCompany = getCompany();
   async function getServices(companyId: string | null) {
@@ -71,7 +71,6 @@ function Services() {
                 deleteItem={() => deleteService(service.id)}
                 linkUpdate={`/services/create/${service.id}`}
                 id={service.id}
-                image={service.photo ?? ""}
                 name={service.name}
                 description={service.price.toString()}
               />

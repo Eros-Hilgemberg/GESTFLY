@@ -1,4 +1,6 @@
 import App from "@/components/pages/app";
+import ClientCreate from "@/components/pages/client/clientCreate";
+import Clients from "@/components/pages/client/clients";
 import CompanyCreate from "@/components/pages/company/companyCreate";
 import Config from "@/components/pages/config/config";
 import Home from "@/components/pages/home";
@@ -32,6 +34,8 @@ export const router = createBrowserRouter([
           { path: "/products/create/:id?", element: <ProductCreate /> },
           { path: "/services", element: <Services /> },
           { path: "/services/create/:id?", element: <ServiceCreate /> },
+          { path: "/clients", element: <Clients /> },
+          { path: "/clients/create/:id?", element: <ClientCreate /> },
           { path: "/config", element: <Config /> },
         ],
       },

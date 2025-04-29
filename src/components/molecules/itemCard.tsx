@@ -24,7 +24,7 @@ import {
 interface ItemCardProps {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   image?: string;
   deleteItem: (id: string) => void;
   linkUpdate: string;
