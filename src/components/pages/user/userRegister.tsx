@@ -58,7 +58,7 @@ function UserRegister() {
 
   async function onSubmit(data: z.infer<typeof userSchema>) {
     try {
-      await AuthService.signUp(data).then((response) => {
+      await AuthService.signUp(data).then(() => {
         toast.success("Registro realizado com sucesso!");
         navigate("/user");
       });

@@ -53,7 +53,7 @@ function UserLogin() {
 
   async function onSubmit(data: z.infer<typeof userSchema>) {
     try {
-      await signIn(data.email, data.password).then((response) => {
+      await signIn(data.email, data.password).then(() => {
         toast.success("Sucesso ao realizar login!");
         navigate("/user");
         return;
