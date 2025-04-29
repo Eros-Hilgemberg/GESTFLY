@@ -8,7 +8,7 @@ interface navbarProps {
   type?: string;
 }
 function NavBar({ type }: navbarProps) {
-  const dataCompany: Partial<CompanyType> = getCompany() || {};
+  const dataCompany: Partial<CompanyType> = getCompany();
   switch (type) {
     case "isLogged":
       return (

@@ -38,7 +38,7 @@ function ItemCard({
   image,
 }: ItemCardProps) {
   return (
-    <Card className="flex flex-col md:flex-row justify-between ">
+    <Card className="flex flex-col p-3 md:flex-row justify-between ">
       <CardHeader className="justify-center md:justify-start flex-1 flex h-full gap-5 items-center">
         <div className="w-15 h-15 rounded-2xl">
           {image ? (
