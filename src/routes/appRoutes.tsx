@@ -28,7 +28,9 @@ export const router = createBrowserRouter([
         Component: BasePageLayout,
         children: [
           { path: "/user", element: <User /> },
+          { path: "/user/config", element: <Config /> },
           { path: "/user/company/create/:id?", element: <CompanyCreate /> },
+          { path: "/config", element: <Config /> },
           { path: "/home", element: <Home /> },
           { path: "/products", element: <Products /> },
           { path: "/products/create/:id?", element: <ProductCreate /> },
@@ -36,7 +38,6 @@ export const router = createBrowserRouter([
           { path: "/services/create/:id?", element: <ServiceCreate /> },
           { path: "/clients", element: <Clients /> },
           { path: "/clients/create/:id?", element: <ClientCreate /> },
-          { path: "/config", element: <Config /> },
         ],
       },
     ],

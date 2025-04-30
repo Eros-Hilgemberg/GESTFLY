@@ -91,16 +91,20 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarSeparator />
           <div className="flex justify-center mt-4">
-            <div className=" group-data-[collapsible=icon]:size-6 w-20 h-20 rounded-2xl ">
-              {dataCompany?.photo ? (
+            {location.pathname.match("/user") ? (
+              ""
+            ) : dataCompany?.photo ? (
+              <div className=" group-data-[collapsible=icon]:size-6 w-20 h-20 rounded-2xl ">
                 <img
                   src={"data:image/png;base64," + dataCompany?.photo}
                   className="rounded-2xl"
                 />
-              ) : (
+              </div>
+            ) : (
+              <div className=" group-data-[collapsible=icon]:size-6 w-20 h-20 rounded-2xl ">
                 <img src="public/img/empty.png" alt="imagem" />
-              )}
-            </div>
+              </div>
+            )}
           </div>
           <SidebarGroupContent className="flex flex-col justify-between grow-1">
             {location.pathname.match("/user") ? (
@@ -119,26 +123,32 @@ export function AppSidebar() {
                 ))}
               </SidebarMenu>
             )}
-
             <SidebarMenu className="flex flex-col mt-2">
-              {itemsFooter.map((itemFooter) => (
-                <SidebarMenuItem key={itemFooter.title}>
-                  <SidebarMenuButton
-                    className={
-                      itemFooter.title == "Sair"
-                        ? "font-semibold text-destructive"
-                        : "font-semibold"
+              <SidebarMenuItem>
+                <SidebarMenuButton className={"font-semibold"} asChild>
+                  <a
+                    className="h-12"
+                    href={
+                      location.pathname.match("/user")
+                        ? "/user/config"
+                        : "/config"
                     }
-                    onClick={() => signOut()}
-                    asChild
                   >
-                    <a className="h-12" href={itemFooter.url}>
-                      <itemFooter.icon />
-                      <span>{itemFooter.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                    <Gear />
+                    <span>Configurações</span>
+                  </a>
+                </SidebarMenuButton>
+                <SidebarMenuButton
+                  className={"font-semibold text-destructive"}
+                  onClick={() => signOut()}
+                  asChild
+                >
+                  <a className="h-12" href={"/login"}>
+                    <SignOut />
+                    <span>Sair</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
